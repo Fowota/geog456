@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 15px;
+      border-radius: 5px;  
+      background: #d3d3d3;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+    }
+    
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%; 
+      background: #04AA6D;
+      cursor: pointer;
+    }
+    
+    .slider::-moz-range-thumb {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #04AA6D;
+      cursor: pointer;
+    }
+    
+    </style>
+
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+        integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+        crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
+        <script src="./mwb.js" ></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Evolution of Global Maritime Boundaries</title>
+</head>
+
+<style>
+    #mapid{ width: 900px; height: 600px; }
+</style>
+
+<body>
+    <h1>The Evolution of Global Maritime Boundaries</h1>
+    <div class="slidecontainer">
+        <input id = "yearSlider" type="range" name="year" min="1899" max="2019" oninput="moveSlider(this.value)" value="1840">
+    <br></br>
+    </div>
+
+    <div id="mapid"></div>
+
+ <script>  
+
+     var map = L.map('mapid').setView([35.91, -79.05], 5);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+    
+    var borders = L.geoJSON(mwbdata.properties.year[0], {
+        pointToLayer: function (feature, latlng) { 
+        ;} }).addTo(map);
+    map.addLayer(borders)
+
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+
+    slider.oninput = function() {
+        output.innerHTML = mwbdata.features[(this.value-1)].properties.year;
+        map.removeLayer(borders);
+        borders = L.geoJSON(mwbdata.features.slice(0,this.value),
+        {pointToLayer: function (feature, latlng) { 
+       ;}}); 
+        map.addLayer(borders); 
+        }
+
+        window.onload = function() {
+            slider.value = 1;  
+    }
+
+</script>
+    
+</body>
+</html>
