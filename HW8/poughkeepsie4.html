@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    img {
+        position: absolute;
+        height: 400px
+    }
+    button {
+        position: absolute;
+        top:400px
+    }
+</style>
+
+<body>
+    <img id = 'before' src="./images/2013.png" alt="">
+    <img id = 'another' src="./images/2015.png" alt="">
+    <img id = 'after' src="./images/2019.png" alt="">
+    <button style="left:650px" onclick="myFunction('after')">after</button>
+    <button style="left:100px" onclick="myFunction('before')">before</button>
+    <button style="left:350px" onclick="myFunction('another')">another</button>
+</body>
+
+<script>
+    function myFunction(id){
+        var imgs = document.getElementsByTagName('img')
+        for(var i=0; i < imgs.length; i++){imgs[i].style.visibility='hidden'}
+        var image = document.getElementById(id)
+        image.style.visibility = 'visible'
+        console.log(image)
+    }
+</script>
+
+</html>
