@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet preview</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+          integrity="sha384-o/2yZuJZWGJ4s/adjxVW71R+EO/LyCwdQfP5UWSgX/w87iiTXuvDZaejd3TsN7mf" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+            integrity="sha384-okbbMvvx/qfQkmiQKfd5VifbKZ/W8p1qIsWvE1ROPUfHWsDcC8/BnHohF7vPg2T6" crossorigin="">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-geotiff/leaflet-geotiff.js"></script>
+    <style>
+        #title {
+            text-align: center;
+            margin-top: 20px;
+            background-color: white;
+        }
+
+        #title h1 {
+            font-size: 24px;
+            color: #333;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        #subheading {
+            font-size: 14px;
+            color: #333;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            text-align: center;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #map {
+            width: calc(100% - 40px);
+            height: calc(100% - 40px);
+            margin: 20px;
+        }
+
+        .button {
+            position: absolute;
+            bottom: 40px;
+            right: 10px;
+            z-index: 1000;
+            background-color: whitesmoke;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 0;
+            background-color: #ffffff;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        }
+
+        .leaflet-popup-content {
+            padding: 10px;
+        }
+
+        .custom-popup .leaflet-popup-tip-container {
+            display: none;
+        }
+
+        .custom-popup-top-left {
+            position: absolute !important;
+            top: 10px !important;
+            left: 10px !important;
+            transform: none !important;
+        }
+
+        #toggleLayerButton1 {
+            bottom: 40px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        #toggleLayerButton2 {
+            bottom: 70px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        #toggleLayerButton3 {
+            bottom: 100px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        #toggleLayerButton4 {
+            bottom: 130px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        #toggleLayerButton5 {
+            bottom: 160px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        #toggleLayerButton6 {
+            bottom: 190px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        #toggleLayerButton7 {
+            bottom: 220px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+    </style>
+</head>
+<body>
+<div id="title">
+    <h1>Mapping Cocoa Farms in Ghana</h1>
+</div>
+<div id="subheading">
+    <h2>Digitizing Historical Maps from the 1950s</h2>
+</div>
+<div id="map"></div>
+
+<button id="toggleLayerButton1" class=button
+        onclick="toggleTileLayer('shai', [6.09174, -0.374749], 15, 'Shai Nankese; Capture land is a Jamaican colloquialism for land that is (or is presumed to be) occupied without the authorization of the landowner. Working through two quotes, “just to make life for a time,” and, “we’ve always been here,” this article examines how the practice of capture indexes abolitionist spatial practices of varied temporalities: rooted in belonging to place, but also alighting provisionally. Through ethnographic research, this article reveals the use of capture for both placemaking and flight, parallel but in tension with the fixity and fluidity inhered in the liberal property regime. Compared with earlier ethnographies of land tenure in Jamaica, this points to an epistemology that is less preoccupied by ownership. What takes primacy is the care for generations of plants, children, rebels, and futures unfolding through “the plot” and its multiple agendas—sustenance (plot of land), refusal (plot to rebel) and the plotting of alternate futures. While here emerges through the spatiotemporalities of life in the interstices of racial capitalism, it also challenges us to reimagine how to think land after colonialism and beyond property. From here, we might imagine simultaneity of apparently discrepant temporalities of Black freedom dreams and speculate on the spacetimes of “freedom is a place.”')">Shai Nankese - 1912
+</button>
+<button id="toggleLayerButton2" class=button
+        onclick="toggleTileLayer('kofi',[5.61129, -0.582704], 15, 'Kofi Pare')">Kofi Pare - 1930
+</button>
+<button id="toggleLayerButton3" class=button
+        onclick="toggleTileLayer('kwesi', [6.03939, -0.551549], 14,'Kwesi Komfo')">Kwesi Komfo — 1930
+</button>
+<button id="toggleLayerButton4" class=button
+        onclick="toggleTileLayer('kyerepon', [6.03343, -0.560296], 14.8, 'Kyerepon')">Kyerepon — 1930
+</button>
+<button id="toggleLayerButton5" class=button
+        onclick="toggleTileLayer('mamfe',[6.06087, -0.527867], 15, 'Mamfe Soforosua')">Mamfe Soforosua — 1930
+</button>
+<button id="toggleLayerButton6" class=button
+        onclick="toggleTileLayer('trayo', [6.04932, -0.383447], 14.2, 'Mamfe Trayo')">Mamfe Trayo — 1930
+</button>
+<button id="toggleLayerButton7" class=button
+        onclick="toggleTileLayer('shai', [6.99867,-0.69605], 8, 'General Info')">Background
+</button>
+
+<script>
+    var map = L.map('map').setView([6.99867, -0.69605], 8);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var layers = {
+        shai: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/shainankese/{z}/{x}/{y}.png', {
+            minZoom: 10,
+            maxZoom: 17,
+            tms: false,
+            attribution: 'Created by QGIS'
+        }),
+        kofi: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/kofipare/{z}/{x}/{y}.png', {
+            minZoom: 10,
+            maxZoom: 17,
+            tms: false,
+            attribution: 'Created by QGIS'
+        }),
+        kwesi: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/kwesikomfo/{z}/{x}/{y}.png', {
+            minZoom: 10,
+            maxZoom: 17,
+            tms: false,
+            attribution: 'Created by QGIS'
+        }),
+        kyerepon: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/kyerepon/{z}/{x}/{y}.png', {
+            minZoom: 10,
+            maxZoom: 17,
+            tms: false,
+            attribution: 'Created by QGIS'
+        }),
+        mamfe: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/mamfesaforusua/{z}/{x}/{y}.png', {
+            minZoom: 10,
+            maxZoom: 17,
+            tms: false,
+            attribution: 'Created by QGIS'
+        }),
+        trayo: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/mamfetrayo/{z}/{x}/{y}.png', {
+            minZoom: 10,
+            maxZoom: 17,
+            tms: false,
+            attribution: 'Created by QGIS'
+        })
+    };
+
+    var cocoafarms = new L.GeotiffLayer({
+        url: 'file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/cocoafarms'
+    }).addTo(map);
+
+    // Function to toggle tile layers
+    function toggleTileLayer(layername, center, zoom, popupText) {
+        var layer = layers[layername];
+        map.closePopup(); // Close existing popups
+        Object.values(layers).forEach(l => map.removeLayer(l)); // Remove all other layers
+        layer.addTo(map); // Add the required layer
+        map.flyTo(center, zoom, {duration: 2}); // Fly to the specified location
+
+        if (popupText) {
+            createPersistentPopup(popupText);
+        }
+    }
+
+    // Function to create a persistent popup
+    function createPersistentPopup(popupText) {
+        var popup = L.popup({
+            closeButton: false,
+            className: 'custom-popup custom-popup-top-left',
+            autoPan: false // Prevents the map from panning the popup into view
+        }).setContent(popupText);
+
+        map.openPopup(popup, map.containerPointToLatLng([10, 10])); // Open the popup at the top-left corner
+
+        // Ensure the popup stays in the top-left corner on map movement
+        map.on('move', function () {
+            var topLeft = map.containerPointToLatLng([10, 10]); // Convert top-left screen position to latLng
+            popup.setLatLng(topLeft);
+        });
+    }
+
+    // Simulate a click event on the "Background" button after defining it
+    document.getElementById('toggleLayerButton7').click();
+
+</script>
+</body>
+</html>
+
+
+

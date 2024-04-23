@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cocoa Farms Ghana</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+          integrity="sha384-o/2yZuJZWGJ4s/adjxVW71R+EO/LyCwdQfP5UWSgX/w87iiTXuvDZaejd3TsN7mf" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+            integrity="sha384-okbbMvvx/qfQkmiQKfd5VifbKZ/W8p1qIsWvE1ROPUfHWsDcC8/BnHohF7vPg2T6" crossorigin="">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-geotiff/leaflet-geotiff.js"></script>
+    <style>
+        #title {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#title h1 {
+    font-size: 24px;
+    color: #333;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    
+}
+
+#subheading {
+    font-size: 14px;
+    color: #333;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-align: center;
+    font-style: italic;
+}
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: white; }
+    #map { 
+        width: calc(100% - 40px);
+        height: calc(100% - 40px);
+        margin: 20px; }
+
+        .button {
+            position: absolute; bottom: 25px; z-index: 1000;
+            background-color: #e6f3ff; padding: 5px 10px; border: 1px solid #ccc;
+            border-radius: 0px; cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 0;
+            background-color: whitesmoke;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        }
+
+        .leaflet-popup-content {
+            padding: 10px;
+        }
+
+        .custom-popup .leaflet-popup-tip-container {
+    display: none;
+}
+
+
+    .custom-popup-top-left {
+    position: absolute !important;
+    top: 10px !important;
+    left: 10px !important;
+    transform: none !important; }/* Removes Leaflet's default positioning */
+        
+        #toggleLayerButton1 { bottom: 25px; right: 30px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}
+        #toggleLayerButton2 { bottom: 55px; right: 30px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}
+        #toggleLayerButton3 { bottom: 85px; right: 30px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}
+        #toggleLayerButton4 { bottom: 115px; right: 30px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}
+        #toggleLayerButton5 { bottom: 145px; right: 30px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}
+        #toggleLayerButton6 { bottom: 175px; right: 30px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}
+        #toggleLayerButton7 { bottom: 25px; left: 30px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}
+
+    </style>
+</head>
+<body>
+    <div id="background"></div>
+    <div id="title">
+        <h1>Mapping Cocoa Farms in Ghana</h1>
+    </div>
+    <div id="subheading">
+    <h2>Digitizing Historical Farm Maps from the Early 1900s</h2>
+</div>
+    <div id="map"></div>
+
+    <button id="toggleLayerButton1" class=button onclick="toggleTileLayer('shai', [6.09174, -0.374749], 15, 'Shai Nankese</br></br>')">Shai Nankese — 1912</button>
+    <button id="toggleLayerButton2" class=button onclick="toggleTileLayer('kofi',[5.61129, -0.582704], 15, 'Kofi Pare')">Kofi Pare — 1911</button>
+    <button id="toggleLayerButton3" class=button onclick="toggleTileLayer('kwesi', [6.03939, -0.551549], 13.5,'Kwesi Komfo </br></br>')">Kwesi Komfo — 1912</button>
+    <button id="toggleLayerButton4" class=button onclick="toggleTileLayer('kyerepon', [6.03343, -0.560296], 14.6, 'Kyerepon')">Kyerepon — 1912</button>
+    <button id="toggleLayerButton5" class=button onclick="toggleTileLayer('mamfe',[6.06087, -0.527867], 15, 'Mamfe Soforosua')">Mamfe Soforosua — 1930</button>
+    <button id="toggleLayerButton6" class=button onclick="toggleTileLayer('trayo', [6.04932, -0.383447], 14.2, 'Date of acquisition and cost. Papers dated I907 and 191 record the receipt by the c Asafo of two sums of ?350 for the land. As receipts were often drawn up long af performance of the guaha ceremony, which marked the formal transfer of owners indeed long after payment (being then mere records of past transactions), the da may have been before I907, though probably not long before. Many of the farme a very long time before they started farming on any scale: it is said that the ow share IV, for instance, never farmed his land and it was not until about 1930 that  tives went there.')">Mamfe Trayo — 1907</button>
+    <button id="toggleLayerButton7" class=button onclick="toggleTileLayer('shai', [6.99867,-0.69605], 8, 'hi')">General Information</button>
+
+    <script>
+       var satelliteview = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            minZoom: 6,
+            maxZoom: 16,
+        });
+       
+       var map = L.map('map').setView([6.99867,-0.69605], 7);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var layers = {
+            shai: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/shainankese/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'},),
+            kofi: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/kofipare/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'}),
+            kwesi: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/kwesikomfo/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'}),
+            kyerepon: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/kyerepon/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'}),
+            mamfe: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/mamfesaforusua/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'}),
+            trayo: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/mamfetrayo/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'})
+        };
+
+        var cocoafarms = L.tileLayer('./cocoafarms/{z}/{x}/{y}.png', {
+            minZoom: 6,
+            maxZoom: 16,
+            maxNativeZoom: 12
+        });
+
+
+        function toggleTileLayer(layername, center, zoom, popupText) {
+    var layer = layers[layername];
+    map.closePopup(); // Close existing popups
+    Object.values(layers).forEach(l => map.removeLayer(l)); // Remove all other layers
+    layer.addTo(map); // Add the required layer
+    map.flyTo(center, zoom, {duration: 2}); // Fly to the specified location
+
+    if (popupText) {
+        createPersistentPopup(popupText);
+    }
+
+    };
+
+    function createPersistentPopup(popupText) {
+    var popup = L.popup({
+        closeButton: false,
+        className: 'custom-popup custom-popup-top-left',
+        autoPan: false // Prevents the map from panning the popup into view
+    }).setContent(popupText);
+
+    map.openPopup(popup, map.containerPointToLatLng([10, 10])); // Open the popup at the top-left corner
+
+    // Ensure the popup stays in the top-left corner on map movement
+    map.on('move', function() {
+        var topLeft = map.containerPointToLatLng([10, 10]); // Convert top-left screen position to latLng
+        popup.setLatLng(topLeft);
+})
+        }
+        createPersistentPopup("The farm maps displayed here are digitized from a book published in 1961 by Polly Hill titled 'Migrant Cocoa-Farmers of Southern Ghana: A Study in Rural Capitalism' (Cambridge University Press).</br></br>The cocoa industry in Ghana began in the 1890s. Not long after the migration started, the swollen disease destroyed most of the cocoa trees in the historic cocoa-growing area of Akwapim and Akim Abuakwa.</br></br>These cocoa farms were mapped by staff of the Ghanaian Ministry of Agriculture in the early 1900s in order to facilitate removal of affected trees and compensate farmers whose lands were no longer viable. All the farm maps displayed on this site are from areas lying within the former 'Devastated Area' where the swollen shoot disease had completely wiped out cocoa trees.");
+
+var tileControl = {
+    "Cocoa Farms 2021": cocoafarms
+} 
+
+var overlayMaps = {
+    "Basemap": map,
+   "Satellite view": satelliteview,
+ } 
+
+var layerControl = L.control.layers(overlayMaps, tileControl, {
+    position: 'topright'
+}).addTo(map);
+
+map.zoomControl.remove();
+
+L.control.zoom({
+  position: 'topright'
+}).addTo(map);
+
+    </script>
+</body>
+</html>
