@@ -104,12 +104,12 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-c
         }).addTo(map);
 
         var layers = {
-            shai: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/shainankese/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'},),
-            kofi: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/kofipare/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'}),
-            kwesi: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/kwesikomfo/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'}),
-            kyerepon: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/kyerepon/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'}),
-            mamfe: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/mamfesaforusua/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'}),
-            trayo: L.tileLayer('file:////Users/fowotam/Documents/GitHub/geog456/FarmMaps/tiles/mamfetrayo/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'})
+            shai: L.tileLayer('./tiles/shainankese/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'},),
+            kofi: L.tileLayer('./tiles/kofipare/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'}),
+            kwesi: L.tileLayer('./tiles/kwesikomfo/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'}),
+            kyerepon: L.tileLayer('./tiles/kyerepon/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'}),
+            mamfe: L.tileLayer('./tiles/mamfesaforusua/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'}),
+            trayo: L.tileLayer('./tiles/mamfetrayo/{z}/{x}/{y}.png', {minZoom: 10, maxZoom: 17, tms: false, attribution: 'Created by QGIS'})
         };
 
         var cocoafarms = L.tileLayer('./cocoafarms/{z}/{x}/{y}.png', {
